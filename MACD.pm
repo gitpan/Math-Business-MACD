@@ -3,7 +3,7 @@ package Math::Business::MACD;
 use strict;
 use warnings;
 
-our $VERSION = '1.01';
+our $VERSION = '1.10';
 
 use Carp;
 use Math::Business::EMA;
@@ -47,10 +47,19 @@ sub set_days {
     $this->{trig_EMA}->set_days($trig);
 }
 
+sub query_trig_ema { my $this = shift; return $this->{trig_EMA}->query }
+sub query_slow_ema { my $this = shift; return $this->{slow_EMA}->query }
+sub query_fast_ema { my $this = shift; return $this->{fast_EMA}->query }
+
 sub query {
     my $this = shift;
 
-    return $this->{fast_EMA}->query - $this->{slow_EMA}->query;
+    my $f = $this->query_fast_ema;
+    my $s = $this->query_slow_ema;
+
+    return undef unless defined($f) and defined($s);
+
+    return $f - $s;
 }
 
 sub insert {
@@ -62,14 +71,21 @@ sub insert {
     $this->{slow_EMA}->insert($value);
     $this->{fast_EMA}->insert($value);
 
-    $this->{trig_EMA}->insert( $this->query );
+    my $m = $this->query;
+
+    $this->{trig_EMA}->insert( $m ) if defined($m);
 }
 
-sub query_trig_ema { my $this = shift; return $this->{trig_EMA}->query }
-sub query_slow_ema { my $this = shift; return $this->{slow_EMA}->query }
-sub query_fast_ema { my $this = shift; return $this->{fast_EMA}->query }
+sub query_histogram { 
+    my $this = shift; 
 
-sub query_histogram { my $this = shift; return $this->query - $this->query_trig_ema; }
+    my $m = $this->query;
+    my $t = $this->query_trig_ema;
+
+    return undef unless $m and $t;
+
+    return $m - $t;
+}
 
 __END__
 
@@ -116,6 +132,15 @@ Math::Business::MACD - Perl extension for calculating MACDs
   # store the last slow, fast, and trigger ema's.
   # somewhere
 
+=head1 EMA/SMA Note
+
+    As of SMA 0.99, EMA 1.06, MACD 1.10, the MACD will now return 
+    'undef' where there is not yet enough data to calculate the EMAs.
+    Further, the trigger and histogram values will not be available until
+    the trigger EMA has enough data.
+
+    This is going to be a compat buster for some of my graphs, but it has
+    to be done for correctness.  :(
 
 =head1 AUTHOR
 

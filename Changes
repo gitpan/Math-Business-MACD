@@ -1,3 +1,7 @@
+1.1:  Thu Dec  5 14:39:56 EST 2002
+   - jettero added the undef concept from the EMA/SMA
+     modules
+
 1.01:  Sun Oct 13 11:17:23 EDT 2002
    - jettero added the start_with function
 

@@ -3,11 +3,7 @@
 
 use Test;
 
-@close = qw(
-    5 6 7 8 7 8 7 8 9 6 5 43 3 65 7 7 4 6 3 6 3 6 3
-);
-
-plan tests => 2 + int(@close);
+plan tests => 4;
 
 use Math::Business::MACD; ok 1;
 
@@ -15,17 +11,7 @@ $macd = new Math::Business::MACD;
 
 $macd->set_days(26, 12, 9);
 
-foreach(@close) {
-    $macd->insert( $_ ); ok 1;
-    printf STDERR " Close: \%5.2f, MACD: \%4.2f, Trigger EMA: \%4.2f\n", $_, $macd->query, $macd->query_trig_ema;
-}
+$macd->insert( 3 ) for 1..25; ok !defined($macd->query);
+$macd->insert( 3 );           ok( defined($macd->query) and 0 == $macd->query );
 
-# ok, we don't actually check the calculation...
-# but at least we know this works syntatically. ;)
-$macd->start_with(
-    $macd->query_slow_ema,
-    $macd->query_fast_ema,
-    $macd->query_trig_ema,
-);
-
-ok 1;
+$macd->insert( 30 ); ok( $macd->query > 0 );  # this is good enough for me really.
