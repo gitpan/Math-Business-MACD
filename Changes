@@ -1,3 +1,6 @@
+0.96:  Tue Jun  4 21:10:50 EDT 2002
+   - jettero added croaks
+
 0.95:  Tue Jun  4 21:06:36 EDT 2002
    - jettero added some tests, cleaned up the distribution,
      and made every thing installable.

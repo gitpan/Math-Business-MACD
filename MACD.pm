@@ -3,7 +3,7 @@ package Math::Business::MACD;
 use strict;
 use warnings;
 
-our $VERSION = '0.95';
+our $VERSION = '0.96';
 
 use Carp;
 use Math::Business::EMA;
@@ -15,12 +15,19 @@ sub new {
         slow_EMA => new Math::Business::EMA,
         fast_EMA => new Math::Business::EMA,
         trig_EMA => new Math::Business::EMA,
+        days     => 0,
     } 
 }
 
 sub set_days {
     my $this = shift;
     my ($slow, $fast, $trig) = @_;
+
+    croak "slow days must be a positive non-zero integers" if $slow <= 0;
+    croak "fast days must be a positive non-zero integers" if $fast <= 0;
+    croak "trig days must be a positive non-zero integers" if $trig <= 0;
+
+    $this->{days} = 1;
 
     $this->{slow_EMA}->set_days($slow);
     $this->{fast_EMA}->set_days($fast);
@@ -36,6 +43,8 @@ sub query {
 sub insert {
     my $this  = shift;
     my $value = shift;;
+
+    croak "You must set the number of days before you try to insert" if not $this->{days};
 
     $this->{slow_EMA}->insert($value);
     $this->{fast_EMA}->insert($value);
