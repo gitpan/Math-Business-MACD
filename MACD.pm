@@ -3,7 +3,7 @@ package Math::Business::MACD;
 use strict;
 use warnings;
 
-our $VERSION = '1.00';
+our $VERSION = '1.01';
 
 use Carp;
 use Math::Business::EMA;
@@ -17,6 +17,19 @@ sub new {
         trig_EMA => new Math::Business::EMA,
         days     => 0,
     } 
+}
+
+sub start_with {
+    my $this = shift;
+    my ($slow, $fast, $trig) = @_;
+
+    croak "undefined slow ema" unless defined $slow;
+    croak "undefined fast ema" unless defined $fast;
+    croak "undefined trig ema" unless defined $trig;
+
+    $this->{slow_EMA}->start_with($slow);
+    $this->{fast_EMA}->start_with($fast);
+    $this->{trig_EMA}->start_with($trig);
 }
 
 sub set_days {
@@ -86,6 +99,23 @@ Math::Business::MACD - Perl extension for calculating MACDs
             "   Fast EMA: ", $macd->query_fast_ema, "\n",
             "   Slow EMA: ", $macd->query_slow_ema, "\n";
   }
+
+  # to avoid recalculating huge lists when 
+  # you add a few new values on the end
+
+  $ema->start_with( 
+      $last_slow_ema,
+      $last_fast_ema,
+      $last_trig_ema,
+  );
+
+  # then continue with a foreach over the newly
+  # inserted values
+
+  # unfortunately this means you'd have had to
+  # store the last slow, fast, and trigger ema's.
+  # somewhere
+
 
 =head1 AUTHOR
 
