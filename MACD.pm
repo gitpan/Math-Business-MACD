@@ -3,7 +3,7 @@ package Math::Business::MACD;
 use strict;
 use warnings;
 
-our $VERSION = '0.96';
+our $VERSION = '0.99';
 
 use Carp;
 use Math::Business::EMA;
@@ -56,6 +56,8 @@ sub query_trig_ema { my $this = shift; return $this->{trig_EMA}->query }
 sub query_slow_ema { my $this = shift; return $this->{slow_EMA}->query }
 sub query_fast_ema { my $this = shift; return $this->{fast_EMA}->query }
 
+sub query_histogram { my $this = shift; return $this->query - $this->query_trig_ema; }
+
 __END__
 
 =head1 NAME
@@ -87,12 +89,24 @@ Math::Business::MACD - Perl extension for calculating MACDs
 
 =head1 AUTHOR
 
-Jettero Heller jettero@cpan.org
+Jettero Heller <jettero@cpan.org>
 
 http://www.voltar.org
+
+=head1 Thanks
+
+David Perry <deperry@??secret??.com>
+
+=head1 Special Thanks
+
+http://www.stockcharts.com/education/What/IndicatorAnalysis/indic_MACD1.html
 
 =head1 SEE ALSO
 
 perl(1), Math::Business::EMA(3).
+
+=head1 Go Read this Page:
+
+http://www.stockcharts.com/education/What/IndicatorAnalysis/indic_MACD1.html
 
 =cut

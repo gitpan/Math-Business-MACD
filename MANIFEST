@@ -15,7 +15,5 @@ distclean
 format.scr
 makeitromscratch
 manifestbuilder
-macd.htm
 MANIFEST.SKIP
-truemome.html
 .cvsignore
