@@ -3,7 +3,7 @@ package Math::Business::MACD;
 use strict;
 use warnings;
 
-our $VERSION = '0.99';
+our $VERSION = '1.00';
 
 use Carp;
 use Math::Business::EMA;
@@ -31,7 +31,7 @@ sub set_days {
 
     $this->{slow_EMA}->set_days($slow);
     $this->{fast_EMA}->set_days($fast);
-    $this->{trig_EMA}->set_days($fast);
+    $this->{trig_EMA}->set_days($trig);
 }
 
 sub query {
@@ -95,7 +95,7 @@ http://www.voltar.org
 
 =head1 Thanks
 
-David Perry <deperry@??secret??.com>
+David Perry <David.Perry@ca.com>
 
 =head1 Special Thanks
 
