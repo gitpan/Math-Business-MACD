@@ -1,0 +1,5 @@
+#!/bin/sh
+
+perl Makefile.PL skip_stuff
+make distclean 
+./manifestbuilder

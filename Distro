@@ -1,0 +1,22 @@
+#!/bin/sh
+
+./distclean
+perl Makefile.PL && make dist
+
+if [ -d ~/www/PerlModules ]; then
+    n=`ls Ma*MACD*gz`;
+    date=`date`;
+    cat MACD.pm | pod2html > ~/www/PerlModules/MACD.html
+    rm -vf pod* ~/www/PerlModules/Ma*MACD*gz
+    mv -v Ma*MACD*gz ~/www/PerlModules
+cat > ~/www/PerlModules/MACD.b.html << EOF
+<p>
+I used this for some calculations in my work trying to crack the stock market.
+I'd reall like to find a way to win that game.  Anyway, this calculates the
+Exponential moving average for you.  The <a href="?eo_cat=MACD.html">Math::Business::MACD module</a> 
+(<a href="$n">$n</a>).
+Last updated on $date.
+EOF
+fi
+
+chmod -v 644 ~/www/PerlModules/MACD.* ~/www/PerlModules/Ma*MACD*gz
